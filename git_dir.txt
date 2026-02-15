@@ -1,0 +1,10 @@
+.
+..
+config
+description
+HEAD
+hooks
+index
+info
+objects
+refs

@@ -1,0 +1,92 @@
+En la rama main
+
+No hay commits todavía
+
+Cambios a ser confirmados:
+  (usa "git rm --cached <archivo>..." para sacar del área de stage)
+	nuevos archivos: .gitignore
+	nuevos archivos: 7.3.0
+	nuevos archivos: README.md
+	nuevos archivos: app/actions-admin.ts
+	nuevos archivos: app/actions-user.ts
+	nuevos archivos: app/actions.ts
+	nuevos archivos: app/admin/DashboardClient.tsx
+	nuevos archivos: app/admin/ajustes/AjustesClient.tsx
+	nuevos archivos: app/admin/ajustes/page.tsx
+	nuevos archivos: app/admin/barberos/page.tsx
+	nuevos archivos: app/admin/citas/page.tsx
+	nuevos archivos: app/admin/components/AdminSidebar.tsx
+	nuevos archivos: app/admin/configuracion/page.tsx
+	nuevos archivos: app/admin/layout.tsx
+	nuevos archivos: app/admin/page.tsx
+	nuevos archivos: app/admin/servicios/page.tsx
+	nuevos archivos: app/admin/usuarios/GestionUsuariosClient.tsx
+	nuevos archivos: app/admin/usuarios/page.tsx
+	nuevos archivos: app/api/auth/login/route.ts
+	nuevos archivos: app/api/auth/register/route.ts
+	nuevos archivos: app/api/auth/verify/route.ts
+	nuevos archivos: app/api/reserva/route.ts
+	nuevos archivos: app/api/user/reservas/route.ts
+	nuevos archivos: app/barbero/BarberoDashboardClient.tsx
+	nuevos archivos: app/barbero/BloqueoAtras.tsx
+	nuevos archivos: app/barbero/calendario/CalendarioClient.tsx
+	nuevos archivos: app/barbero/calendario/page.tsx
+	nuevos archivos: app/barbero/components/BarberoSidebar.tsx
+	nuevos archivos: app/barbero/layout.tsx
+	nuevos archivos: app/barbero/page.tsx
+	nuevos archivos: app/barbero/perfil/api/route.ts
+	nuevos archivos: app/barbero/perfil/page.tsx
+	nuevos archivos: app/barbero/servicios/editar/[id]/EditarServicioClient.tsx
+	nuevos archivos: app/barbero/servicios/editar/[id]/page.tsx
+	nuevos archivos: app/barbero/servicios/nuevo/NuevoServicioClient.tsx
+	nuevos archivos: app/barbero/servicios/nuevo/page.tsx
+	nuevos archivos: app/components/BookingClient.tsx
+	nuevos archivos: app/components/RoleSync.tsx
+	nuevos archivos: app/components/UserSidebar.tsx
+	nuevos archivos: app/globals.css
+	nuevos archivos: app/icon.png
+	nuevos archivos: app/layout.tsx
+	nuevos archivos: app/lib/cloudinary.ts
+	nuevos archivos: app/lib/email.ts
+	nuevos archivos: app/lib/prisma.ts
+	nuevos archivos: app/lib/templates/email-ticket.ts
+	nuevos archivos: app/login/page.tsx
+	nuevos archivos: app/mantenimiento/page.tsx
+	nuevos archivos: app/page.tsx
+	nuevos archivos: app/perfil/ProfileClient.tsx
+	nuevos archivos: app/perfil/page.tsx
+	nuevos archivos: app/registro/page.tsx
+	nuevos archivos: app/reservar/page.tsx
+	nuevos archivos: app/reservas/ReservasClient.tsx
+	nuevos archivos: app/reservas/page.tsx
+	nuevos archivos: app/utils/supabase/client.ts
+	nuevos archivos: app/utils/supabase/server.ts
+	nuevos archivos: app/verificar/page.tsx
+	nuevos archivos: check_db.js
+	nuevos archivos: check_db_v2.js
+	nuevos archivos: eslint.config.mjs
+	nuevos archivos: fix-admin.js
+	nuevos archivos: middleware.ts
+	nuevos archivos: next.config.ts
+	nuevos archivos: package-lock.json
+	nuevos archivos: package.json
+	nuevos archivos: postcss.config.mjs
+	nuevos archivos: prisma/schema.prisma
+	nuevos archivos: prisma/seed.ts
+	nuevos archivos: public/abel.jpg
+	nuevos archivos: public/file.svg
+	nuevos archivos: public/globe.svg
+	nuevos archivos: public/next.svg
+	nuevos archivos: public/uploads/logo-1771032919934-Gemini_Generated_Image_2rt99e2rt99e2rt9.png
+	nuevos archivos: public/vercel.svg
+	nuevos archivos: public/window.svg
+	nuevos archivos: scripts/cleanup.js
+	nuevos archivos: tsconfig.json
+
+Archivos sin seguimiento:
+  (usa "git add <archivo>..." para incluirlo a lo que será confirmado)
+	gh_status_check.txt
+	git_status_check.txt
+	remotes.txt
+	status.txt
+

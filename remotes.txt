@@ -1,0 +1,2 @@
+origin	https://github.com/primebarbervip/PrimeBarberClub.git (fetch)
+origin	https://github.com/primebarbervip/PrimeBarberClub.git (push)

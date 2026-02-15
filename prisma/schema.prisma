@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           String    @id @default(cuid())
+  nombre       String
+  email        String    @unique
+  password     String
+  rol          String    @default("cliente") // "admin", "barbero", "cliente"
+  telefono     String?   // NUEVO
+  bio          String?   // NUEVO
+  img          String?   // NUEVO
+  esVerificado Boolean   @default(false)
+  codigoVerif  String?
+  creadoEn     DateTime  @default(now())
+  
+  // Relaciones
+  citasComoCliente Cita[]    @relation("ClienteCitas")
+  perfilBarbero    Barbero?   
+}
+
+model Barbero {
+  id           Int        @id @default(autoincrement())
+  nombre       String
+  especialidad String?
+  descripcion  String?    @db.Text // NUEVO: Para la biografía o "sobre mí"
+  img          String?    // NUEVO: Para la foto de perfil (URL)
+  activo       Boolean    @default(true)
+  
+  // HORARIO
+  inicioJornada String    @default("09:00")
+  finJornada    String    @default("21:00")
+  inicioAlmuerzo String?  // Opcional
+  finAlmuerzo    String?  // Opcional
+  almuerzoActivo Boolean  @default(true) // NUEVO: Activar/Desactivar globalmente
+  
+  usuarioId    String     @unique
+  usuario      Usuario    @relation(fields: [usuarioId], references: [id])
+  
+  servicios    Servicio[] 
+  horariosEspeciales HorarioEspecial[]
+  citas        Cita[]     @relation("BarberoCitas")
+}
+
+model HorarioEspecial {
+  id             Int      @id @default(autoincrement())
+  barberoId      Int
+  barbero        Barbero  @relation(fields: [barberoId], references: [id])
+  fecha          String   // Formato "YYYY-MM-DD"
+  inicioJornada  String
+  finJornada     String
+  inicioAlmuerzo String?
+  finAlmuerzo    String?
+  cerrado        Boolean  @default(false)
+  bloqueos       String[] // NUEVO: Para bloquear slots específicos
+  habilitados    String[] // NUEVO: Para habilitar slots (incluso si son almuerzo o fuera de jornada)
+
+  @@unique([barberoId, fecha])
+}
+
+model Servicio {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  precio      Decimal
+  duracion    Int      
+  descripcion String?
+  esCombo     Boolean  @default(false)
+
+  // Relación para Combos (un servicio combo puede incluir varios servicios)
+  serviciosIncluidos Servicio[] @relation("ComboServicios")
+  paquetes          Servicio[] @relation("ComboServicios")
+
+  // Cada servicio pertenece a un barbero
+  barberoId   Int?
+  barbero     Barbero? @relation(fields: [barberoId], references: [id])
+  
+  citas       Cita[]
+}
+
+model Cita {
+  id          Int      @id @default(autoincrement())
+  fecha       DateTime
+  hora        String
+  estado      String   @default("pendiente") // "pendiente", "confirmada", "cancelada"
+
+  clienteId   String
+  cliente     Usuario  @relation("ClienteCitas", fields: [clienteId], references: [id])
+
+  barberoId   Int
+  barbero     Barbero  @relation("BarberoCitas", fields: [barberoId], references: [id])
+
+  servicioId  Int
+  servicio    Servicio @relation(fields: [servicioId], references: [id])
+
+  creadoEn    DateTime @default(now())
+}
+
+model Configuracion {
+  id            Int      @id @default(1)
+  nombreTienda  String   @default("")
+  direccion     String   @default("")
+  googleMapsUrl String   @default("")
+  telefono      String?
+  logo          String?
+  enMantenimiento Boolean @default(false)
+}
