@@ -11,7 +11,6 @@ type Usuario = {
   nombre: string;
   email: string;
   rol: string;
-  rol: string;
   img: string | null;
   perfilBarbero?: {
     img: string | null;
