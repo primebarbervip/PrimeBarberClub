@@ -7,13 +7,29 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 0. MODO MANTENIMIENTO
-  // Eximir a admins y barberos, y rutas esenciales (login, api, estáticos, la propia página de mantenimiento)
   const isPublicAsset = pathname.includes('.') || pathname.startsWith('/_next') || pathname.startsWith('/api');
-  const isExemptPath = pathname === '/login' || pathname === '/mantenimiento' || pathname.startsWith('/admin') || pathname.startsWith('/barbero');
   const isAuthOrStaff = role === 'admin' || role === 'barbero';
 
-  if (mantenimiento && !isAuthOrStaff && !isExemptPath && !isPublicAsset) {
-    return NextResponse.redirect(new URL('/mantenimiento', request.url));
+  if (mantenimiento && !isPublicAsset) {
+    if (isAuthOrStaff) {
+      // Admins and barberos can bypass maintenance.
+      // If they go to /mantenimiento, redirect them to home.
+      if (pathname === '/mantenimiento') {
+        return NextResponse.redirect(new URL('/', request.url));
+      }
+    } else if (role === 'cliente') {
+      // Clientes only have access to /mantenimiento and /login (to logout)
+      const isExemptClientePath = pathname === '/mantenimiento' || pathname === '/login';
+      if (!isExemptClientePath) {
+        return NextResponse.redirect(new URL('/mantenimiento', request.url));
+      }
+    } else {
+      // Not logged in. They should only have access to login and registro.
+      const isExemptGuestPath = pathname === '/login' || pathname === '/registro';
+      if (!isExemptGuestPath) {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+    }
   }
 
   // Si no hay mantenimiento y el usuario está en la página de mantenimiento, mandarlo a la raíz

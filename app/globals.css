@@ -9,6 +9,7 @@
    El amarillo en "@layer" es normal, ignóralo.
 */
 @layer utilities {
+
   /* Chrome, Safari, Edge, Opera */
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
@@ -23,13 +24,16 @@
 }
 
 /* Fondo gris suave para toda la app */
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
   position: relative;
 }
 
 body {
-  background-color: #fafafa; /* zinc-50 */
-  color: #18181b; /* zinc-900 */
+  background-color: #fafafa;
+  /* zinc-50 */
+  color: #18181b;
+  /* zinc-900 */
 }
