@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma";
 import MantenimientoClient from "./MantenimientoClient";
 
 export const metadata = {
-    title: "Mantenimiento - BarberShop Prime",
+    title: "Mantenimiento temporal - BarberShop Prime",
     description: "Sitio en mantenimiento técnico.",
 };
 
