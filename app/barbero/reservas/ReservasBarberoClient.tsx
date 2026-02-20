@@ -140,7 +140,7 @@ export default function ReservasBarberoClient({ citas }: { citas: Cita[] }) {
         {/* Barra superior: hora actual */}
         <div className="px-4 py-3 border-b border-zinc-800/60 bg-zinc-800/30 flex items-center justify-end">
           <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mr-2">
-            Hora actual
+            HORA ACTUAL
           </span>
           <span className="text-xl font-black text-white tabular-nums tracking-tight">
             {horaActual}
@@ -159,7 +159,24 @@ export default function ReservasBarberoClient({ citas }: { citas: Cita[] }) {
                 transition={{ duration: 0.2 }}
                 className="space-y-6"
               >
-                <div className="flex items-start gap-4">
+                {/* Móvil: solo foto arriba */}
+                <div className="md:hidden flex justify-center mb-4">
+                  <div className="w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-zinc-800 flex items-center justify-center">
+                    {selectedCita.cliente.img &&
+                    selectedCita.cliente.img !== "DELETE" ? (
+                      <img
+                        src={selectedCita.cliente.img}
+                        alt={selectedCita.cliente.nombre}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-12 h-12 text-zinc-500" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Desktop: foto a la izquierda con info */}
+                <div className="hidden md:flex items-start gap-4">
                   <div className="w-20 h-20 rounded-2xl overflow-hidden border border-white/10 bg-zinc-800 shrink-0 flex items-center justify-center">
                     {selectedCita.cliente.img &&
                     selectedCita.cliente.img !== "DELETE" ? (
@@ -192,44 +209,111 @@ export default function ReservasBarberoClient({ citas }: { citas: Cita[] }) {
                   </div>
                 </div>
 
-                <div className="h-px bg-zinc-800/60" />
+                {/* Móvil: cuadro con toda la información abajo */}
+                <div className="md:hidden border border-zinc-800/60 rounded-2xl bg-zinc-800/30 p-4 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-black text-white mb-2">
+                      {selectedCita.cliente.nombre}
+                    </h2>
+                    <p className="text-sm text-zinc-500 flex items-center gap-2">
+                      <Mail className="w-4 h-4 shrink-0" />
+                      {selectedCita.cliente.email}
+                    </p>
+                    {selectedCita.cliente.telefono && (
+                      <a
+                        href={`tel:${selectedCita.cliente.telefono}`}
+                        className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-emerald-400 mt-1 transition-colors"
+                      >
+                        <Phone className="w-4 h-4 shrink-0" />
+                        {selectedCita.cliente.telefono}
+                      </a>
+                    )}
+                  </div>
 
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3">
-                    Reserva
-                  </p>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Scissors className="w-5 h-5 text-emerald-500/80 shrink-0" />
-                      <div>
-                        <p className="font-bold text-white">
-                          {selectedCita.servicio.nombre}
+                  <div className="h-px bg-zinc-700/60" />
+
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3">
+                      RESERVA
+                    </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <Scissors className="w-5 h-5 text-emerald-500/80 shrink-0" />
+                        <div>
+                          <p className="font-bold text-white">
+                            {selectedCita.servicio.nombre}
+                          </p>
+                          <p className="text-sm text-zinc-500">
+                            {selectedCita.servicio.duracion} min · Bs.{" "}
+                            {selectedCita.servicio.precio}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-zinc-500 shrink-0" />
+                        <p className="text-white text-sm">
+                          {new Date(selectedCita.fecha).toLocaleDateString(
+                            "es-ES",
+                            {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
                         </p>
-                        <p className="text-sm text-zinc-500">
-                          {selectedCita.servicio.duracion} min · Bs.{" "}
-                          {selectedCita.servicio.precio}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-zinc-500 shrink-0" />
+                        <p className="text-white font-semibold tabular-nums">
+                          {selectedCita.hora}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-zinc-500 shrink-0" />
-                      <p className="text-white">
-                        {new Date(selectedCita.fecha).toLocaleDateString(
-                          "es-ES",
-                          {
-                            weekday: "long",
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          }
-                        )}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-zinc-500 shrink-0" />
-                      <p className="text-white font-semibold tabular-nums">
-                        {selectedCita.hora}
-                      </p>
+                  </div>
+                </div>
+
+                {/* Desktop: información normal */}
+                <div className="hidden md:block">
+                  <div className="h-px bg-zinc-800/60" />
+
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3">
+                      Reserva
+                    </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <Scissors className="w-5 h-5 text-emerald-500/80 shrink-0" />
+                        <div>
+                          <p className="font-bold text-white">
+                            {selectedCita.servicio.nombre}
+                          </p>
+                          <p className="text-sm text-zinc-500">
+                            {selectedCita.servicio.duracion} min · Bs.{" "}
+                            {selectedCita.servicio.precio}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-zinc-500 shrink-0" />
+                        <p className="text-white">
+                          {new Date(selectedCita.fecha).toLocaleDateString(
+                            "es-ES",
+                            {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-zinc-500 shrink-0" />
+                        <p className="text-white font-semibold tabular-nums">
+                          {selectedCita.hora}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -401,3 +401,20 @@ export async function cancelarReserva(id: number) {
     return { error: "No se pudo cancelar la cita" };
   }
 }
+
+export async function confirmarReserva(id: number) {
+  try {
+    console.log("✅ Confirmando cita:", id);
+    await prisma.cita.update({
+      where: { id },
+      data: { estado: "confirmada" }
+    });
+    revalidatePath("/admin/reservas");
+    revalidatePath("/barbero/reservas");
+    revalidatePath("/reservas");
+    return { success: true };
+  } catch (error) {
+    console.error("Error confirmando cita:", error);
+    return { error: "No se pudo confirmar la cita" };
+  }
+}
