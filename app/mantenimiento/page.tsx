@@ -62,4 +62,3 @@ export default async function MantenimientoPage() {
 
     // 4. ¡Ahora TypeScript está feliz porque le mandamos ambas cosas!
     return <MantenimientoClient usuario={usuario} reservas={reservas} />;
-}
