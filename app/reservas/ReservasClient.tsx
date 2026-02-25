@@ -253,7 +253,7 @@ export default function ReservasClient() {
                     <div className="grid gap-6">
                         {reservas.map((reserva) => {
                             const esExpirada = esCitaExpirada(reserva.fecha, reserva.hora) && reserva.estado.toLowerCase() !== "cancelada";
-                            const status = getStatusStyles(reserva.estado, reserva.fecha, reserva.hora);
+                            const status = getStatusStyles(reserva.estado);
                             const isPending = reserva.estado.toLowerCase() === "pendiente" && !esExpirada;
                             const isCancelled = reserva.estado.toLowerCase() === "cancelada";
 
