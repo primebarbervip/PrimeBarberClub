@@ -95,7 +95,7 @@ export default function LiquidGlassHero({
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-accent/20 bg-accent/5 backdrop-blur-xl mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
-              Experiencia Premium
+              Prime Barber Club
             </span>
           </div>
         </motion.div>

@@ -36,6 +36,17 @@ interface Reserva {
     };
 }
 
+function esCitaExpirada(fecha: string, hora: string): boolean {
+    try {
+        const d = new Date(fecha);
+        const [h, m] = hora.split(":").map(Number);
+        d.setHours(h ?? 0, m ?? 0, 0, 0);
+        return d < new Date();
+    } catch {
+        return false;
+    }
+}
+
 export default function ReservasClient() {
     const [reservas, setReservas] = useState<Reserva[]>([]);
     const [isLoading, setIsLoading] = useState(true);
