@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
+
 import UserSidebar from "./components/UserSidebar";
+import LiquidGlassNav from "./components/LiquidGlassNav";
+import LiquidGlassHero from "./components/LiquidGlassHero";
+import LiquidGlassServices from "./components/LiquidGlassServices";
+import LiquidGlassFeatures from "./components/LiquidGlassFeatures";
+import LiquidGlassCTA from "./components/LiquidGlassCTA";
+import LiquidGlassFooter from "./components/LiquidGlassFooter";
 
 export default function LandingPage() {
   const [userName, setUserName] = useState<string | null>(null);
@@ -44,9 +50,8 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans text-center">
-
-      {/* USER SIDEBAR COMPONENT */}
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans relative overflow-hidden">
+      {/* User Sidebar */}
       <UserSidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -55,59 +60,49 @@ export default function LandingPage() {
         userImg={userImg || ""}
       />
 
-      {/* HEADER / NAV */}
-      <nav className="absolute top-8 right-8 z-50">
-        {userName ? (
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="group relative"
+      {/* Floating Warning Toast */}
+      <AnimatePresence>
+        {showWarning && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-[200]"
           >
-            {/* Pulsing effect for interaction */}
-            <div className="absolute -inset-2 bg-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-zinc-800 bg-zinc-900 group-hover:border-white transition-all shadow-2xl flex items-center justify-center">
-              {userImg ? (
-                <img src={userImg} alt={userName} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-xl font-black text-white">{userName.charAt(0).toUpperCase()}</span>
-              )}
+            <div className="relative rounded-2xl overflow-hidden">
+              <div className="absolute inset-0 bg-red-500/10 backdrop-blur-xl border border-red-500/20 rounded-2xl" />
+              <div className="relative flex items-center gap-3 px-6 py-3">
+                <AlertCircle className="w-4 h-4 text-red-400" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-red-400">
+                  Necesitas iniciar sesión para reservar
+                </span>
+              </div>
             </div>
-          </button>
-        ) : (
-          <Link
-            href="/login"
-            className="px-8 py-3 border border-zinc-800 rounded-full text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all font-black"
-          >
-            Iniciar Sesión
-          </Link>
+          </motion.div>
         )}
-      </nav>
+      </AnimatePresence>
 
-      {/* HERO SECTION */}
-      <div className="text-center relative">
-        <AnimatePresence>
-          {showWarning && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="absolute -top-16 left-1/2 -translate-x-1/2 w-max flex items-center gap-2 bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest"
-            >
-              <AlertCircle size={14} /> Necesitas iniciar sesión para reservar
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* Navigation */}
+      <LiquidGlassNav
+        userName={userName}
+        userImg={userImg}
+        onSidebarOpen={() => setSidebarOpen(true)}
+      />
 
-        <h1 className="text-7xl md:text-9xl font-extralight tracking-[0.4em] -mr-[0.4em] mb-4 text-white">PRIME</h1>
-        <p className="text-zinc-500 tracking-[0.5em] -mr-[0.5em] text-[10px] md:text-[12px] uppercase mb-12 font-bold">The Art of Barbering</p>
+      {/* Hero */}
+      <LiquidGlassHero onReservar={handleReservaClick} />
 
-        <button
-          onClick={handleReservaClick}
-          className="px-14 py-5 bg-white text-black font-black rounded-2xl hover:bg-zinc-200 transition-all shadow-2xl text-[11px] uppercase tracking-[0.3em]"
-        >
-          RESERVAR CITA
-        </button>
-      </div>
+      {/* Services */}
+      <LiquidGlassServices />
+
+      {/* Features */}
+      <LiquidGlassFeatures />
+
+      {/* CTA */}
+      <LiquidGlassCTA onReservar={handleReservaClick} />
+
+      {/* Footer */}
+      <LiquidGlassFooter />
     </div>
   );
 }
