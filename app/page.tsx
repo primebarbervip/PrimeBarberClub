@@ -6,12 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
 
 import UserSidebar from "./components/UserSidebar";
-import LiquidGlassNav from "./components/LiquidGlassNav";
 import LiquidGlassHero from "./components/LiquidGlassHero";
-import LiquidGlassServices from "./components/LiquidGlassServices";
-import LiquidGlassFeatures from "./components/LiquidGlassFeatures";
-import LiquidGlassCTA from "./components/LiquidGlassCTA";
-import LiquidGlassFooter from "./components/LiquidGlassFooter";
 
 export default function LandingPage() {
   const [userName, setUserName] = useState<string | null>(null);
@@ -50,7 +45,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground font-sans relative overflow-hidden">
       {/* User Sidebar */}
       <UserSidebar
         isOpen={sidebarOpen}
@@ -82,27 +77,13 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
-      {/* Navigation */}
-      <LiquidGlassNav
+      {/* Hero - Full screen with login circle */}
+      <LiquidGlassHero
+        onReservar={handleReservaClick}
         userName={userName}
         userImg={userImg}
         onSidebarOpen={() => setSidebarOpen(true)}
       />
-
-      {/* Hero */}
-      <LiquidGlassHero onReservar={handleReservaClick} />
-
-      {/* Services */}
-      <LiquidGlassServices />
-
-      {/* Features */}
-      <LiquidGlassFeatures />
-
-      {/* CTA */}
-      <LiquidGlassCTA onReservar={handleReservaClick} />
-
-      {/* Footer */}
-      <LiquidGlassFooter />
     </div>
   );
 }
