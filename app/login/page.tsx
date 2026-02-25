@@ -54,7 +54,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden font-sans">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/hero-barbershop.jpg"
+          alt=""
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+      </div>
       <div className="absolute inset-0 z-0 cursor-pointer" onClick={handleClose} />
       <AnimatePresence>
         {isVisible && (
@@ -63,26 +72,26 @@ export default function LoginPage() {
             initial={{ opacity: 0, scale: 0.9, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="bg-zinc-900/40 backdrop-blur-2xl p-8 rounded-[2.5rem] border border-zinc-800/50 w-full max-w-md shadow-2xl relative z-10"
+            className="bg-white/[0.04] backdrop-blur-2xl p-8 rounded-[2.5rem] border border-white/[0.08] w-full max-w-md shadow-2xl relative z-10"
           >
             <button onClick={handleClose} className="absolute top-6 right-6 text-zinc-500 hover:text-white"><X size={20} /></button>
             <div className="text-center mb-10">
               <h1 className="text-4xl font-extralight text-white tracking-widest uppercase">Prime</h1>
-              <p className="text-zinc-500 text-[10px] mt-2 uppercase tracking-[0.2em] font-medium">Acceso Privado</p>
+              <p className="text-muted-foreground text-[10px] mt-2 uppercase tracking-[0.2em] font-medium">Acceso Privado</p>
             </div>
             {error && <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded-2xl text-[10px] mb-6 text-center font-bold uppercase tracking-widest">{error}</div>}
             <form onSubmit={handleLogin} className="space-y-4">
-              <input type="email" placeholder="Correo electrónico" className="w-full p-4 bg-zinc-800/30 border border-zinc-700/50 rounded-2xl text-white outline-none focus:border-white transition-all text-sm" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input type="email" placeholder="Correo electrónico" className="w-full p-4 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-foreground outline-none focus:border-accent transition-all text-sm" value={email} onChange={(e) => setEmail(e.target.value)} required />
               <div className="relative">
-                <input type={showPassword ? "text" : "password"} placeholder="Contraseña" className="w-full p-4 bg-zinc-800/30 border border-zinc-700/50 rounded-2xl text-white outline-none focus:border-white transition-all text-sm pr-12" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button>
+                <input type={showPassword ? "text" : "password"} placeholder="Contraseña" className="w-full p-4 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-foreground outline-none focus:border-accent transition-all text-sm pr-12" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button>
               </div>
-              <button type="submit" disabled={loading} className="w-full bg-white text-black font-black py-4 rounded-2xl mt-4 hover:bg-zinc-200 transition-all text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+              <button type="submit" disabled={loading} className="w-full bg-accent text-accent-foreground font-black py-4 rounded-2xl mt-4 hover:bg-accent/90 transition-all text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2">
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Iniciar Sesión"}
               </button>
             </form>
-            <div className="mt-8 pt-6 border-t border-zinc-800/50 text-center text-zinc-500 text-[10px] uppercase tracking-widest font-bold">
-              ¿No tienes cuenta? <Link href="/registro" className="text-white hover:underline ml-2">Regístrate aquí</Link>
+            <div className="mt-8 pt-6 border-t border-white/[0.06] text-center text-muted-foreground text-[10px] uppercase tracking-widest font-bold">
+              ¿No tienes cuenta? <Link href="/registro" className="text-accent hover:underline ml-2">Regístrate aquí</Link>
             </div>
           </motion.div>
         )}
