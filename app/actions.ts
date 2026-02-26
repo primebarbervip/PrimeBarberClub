@@ -410,7 +410,7 @@ export async function guardarConfiguracion(formData: FormData) {
 
     revalidatePath("/");
     revalidatePath("/reservar");
-    revalidatePath("/admin/configuracion");
+    revalidatePath("/admin/informacion");
 
     return { success: true };
   } catch (error: any) {
@@ -475,7 +475,7 @@ export async function toggleMantenimiento(valor: boolean) {
 
     revalidatePath("/");
     revalidatePath("/reservar");
-    revalidatePath("/admin/configuracion");
+    revalidatePath("/admin/informacion");
 
     return { success: true };
   } catch (error: any) {

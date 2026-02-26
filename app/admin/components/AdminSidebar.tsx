@@ -28,7 +28,7 @@ export default function AdminSidebar() {
     const links = [
         { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
         { name: "Usuarios", href: "/admin/usuarios", icon: Users },
-        { name: "Información", href: "/admin/configuracion", icon: Info }, // Renamed
+        { name: "Información", href: "/admin/informacion", icon: Info }, // Renamed
         { name: "Configuración", href: "/admin/ajustes", icon: Settings }, // New
     ];
 
