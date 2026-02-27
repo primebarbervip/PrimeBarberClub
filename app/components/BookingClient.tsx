@@ -435,29 +435,30 @@ export default function BookingClient({ barberos = [], config }: Props) {
         {/* PASO 4: CONFIRMACIÓN (DISEÑO PRIME) */}
         {animarPaso === 4 && (
           <div className="px-4 pt-2 pb-32 max-w-2xl mx-auto space-y-8">
-            <div className="bg-white border border-zinc-100 rounded-[2rem] p-6 sm:p-8 flex flex-col sm:flex-row gap-8 items-start transition-all hover:shadow-lg hover:shadow-zinc-200/50 group">
+            <div className="bg-white border border-zinc-100 rounded-[2rem] p-6 sm:p-8 flex gap-6 sm:gap-8 items-center sm:items-start transition-all hover:shadow-lg hover:shadow-zinc-200/50 group">
               {/* Logo grande a la izquierda */}
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-zinc-50 overflow-hidden border border-zinc-200 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-500">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-zinc-50 overflow-hidden border border-zinc-200 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-500">
                 <img src={config.logo || "/abel.jpg"} className="w-full h-full object-cover" alt="Shop" />
               </div>
               
               {/* Información a la derecha */}
-              <div className="flex-1 space-y-4">
+              <div className="flex-1 space-y-3 sm:space-y-4">
                 <div>
-                  <h2 className="font-black text-[24px] sm:text-[28px] text-zinc-900 tracking-tighter leading-none">{config.nombreTienda || "Barber Shop Prime"}</h2>
-                  <p className="text-[13px] text-zinc-500 font-medium leading-relaxed mt-4">
-                    {config.direccion || "Dirección no configurada"}
-                  </p>
+                  <h2 className="font-black text-[20px] sm:text-[26px] text-zinc-900 tracking-tighter leading-tight">{config.nombreTienda || "Barber Shop Prime"}</h2>
                 </div>
+                
+                <p className="text-[12px] sm:text-[13px] text-zinc-600 font-medium leading-snug max-w-xs">
+                  {config.direccion || "Dirección no configurada"}
+                </p>
 
                 {config.googleMapsUrl && (
                   <a
                     href={config.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-95 shadow-md"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-zinc-900 text-white rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-95 shadow-md"
                   >
-                    <MapPin size={14} />
+                    <MapPin size={13} />
                     Cómo llegar
                   </a>
                 )}
