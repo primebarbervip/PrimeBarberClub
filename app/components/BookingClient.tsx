@@ -305,13 +305,13 @@ export default function BookingClient({ barberos = [], config }: Props) {
       {/* CABECERA PASO 2 */}
       {paso === 2 && (
         <div className="sticky top-[53px] bg-white z-40 px-4 py-3 border-b border-zinc-100 flex items-center justify-between">
-          <div className="flex gap-2">
+            <div className="flex gap-2">
             <button onClick={() => setTabActiva("SERVICIOS")} className={`px-5 py-2 rounded-full text-[12px] font-bold transition-all ${tabActiva === "SERVICIOS" ? "bg-zinc-900 text-white shadow-md" : "text-zinc-400 hover:bg-zinc-50"}`}>SERVICIOS</button>
             <button onClick={() => setTabActiva("COMBOS")} className={`px-5 py-2 rounded-full text-[12px] font-bold transition-all ${tabActiva === "COMBOS" ? "bg-zinc-900 text-white shadow-md" : "text-zinc-400"}`}>COMBOS</button>
           </div>
           <button onClick={() => setMostrarModalBarbero(true)} className="flex items-center gap-2 bg-zinc-50 border border-zinc-200 rounded-full pl-1 pr-3 py-1 scale-90 active:scale-95">
             <div className="w-7 h-7 rounded-full bg-zinc-200 overflow-hidden border border-white">
-              {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" />}
+              {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" alt={profesionalSel.nombre} />}
             </div>
             <span className="text-[10px] font-black text-zinc-600 uppercase tracking-tighter max-w-[80px] truncate">{profesionalSel?.nombre.split(' ')[0]}</span>
             <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
@@ -380,7 +380,7 @@ export default function BookingClient({ barberos = [], config }: Props) {
             <div className="px-4 mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3 bg-zinc-50 border border-zinc-200 rounded-full pl-1.5 pr-5 py-1.5 shadow-sm text-left">
                 <div className="w-8 h-8 rounded-full bg-zinc-100 overflow-hidden border border-zinc-100">
-                  {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" />}
+                  {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" alt={profesionalSel.nombre} />}
                 </div>
                 <span className="font-bold text-[14px] text-zinc-900">{profesionalSel?.nombre}</span>
               </div>
@@ -619,7 +619,7 @@ function ItemBarbero({ nombre, rol, img, descripcion, expandido, onToggle, onCli
       <div className="flex items-center justify-between py-4 px-6 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center gap-5">
           <div className={`w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden border-2 transition-all ${expandido ? 'border-zinc-900 shadow-md' : 'border-zinc-50'}`}>
-            {img ? <img src={img} className="w-full h-full object-cover" /> : <User className="text-zinc-300" size={24} />}
+            {img ? <img src={img} className="w-full h-full object-cover" alt={nombre} /> : <User className="text-zinc-300" size={24} />}
           </div>
           <div className="text-left">
             <h3 className="font-sans font-semibold text-[17px] text-zinc-900 leading-tight">{nombre}</h3>
