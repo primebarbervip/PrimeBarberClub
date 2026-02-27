@@ -231,11 +231,6 @@ export async function actualizarEstadoCita(id: number, nuevoEstado: string) {
               </p>
             </div>
 
-            <!-- Footer message -->
-            <p style="color: #888; font-size: 12px; text-align: center; margin: 0;">
-              Para consultas: ${cita.barbero?.usuario?.email || 'prime@barber.com'}
-            </p>
-          </div>
 
           <!-- Bottom footer -->
           <div style="background: rgba(0,0,0,0.3); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1);">
