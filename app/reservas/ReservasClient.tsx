@@ -94,8 +94,28 @@ export default function ReservasClient() {
 
         try {
             const res = await fetch(`/api/user/reservas?userId=${userId}`);
-            const data = await res.json();
-            setReservas(data);
+            const data: Reserva[] = await res.json();
+
+            const CANCELADAS = ["cancelada", "cancelado", "expirada"];
+
+            const ordenadas = [...data].sort((a, b) => {
+                const aEstado = getEstadoDinamico(a.estado, a.fecha, a.hora).toLowerCase();
+                const bEstado = getEstadoDinamico(b.estado, b.fecha, b.hora).toLowerCase();
+
+                const aEsCancelada = CANCELADAS.includes(aEstado);
+                const bEsCancelada = CANCELADAS.includes(bEstado);
+
+                // Canceladas y expiradas siempre al final
+                if (aEsCancelada && !bEsCancelada) return 1;
+                if (!aEsCancelada && bEsCancelada) return -1;
+
+                // Entre iguales: más reciente primero (fecha descendente)
+                const fechaA = new Date(`${a.fecha}T${a.hora}`);
+                const fechaB = new Date(`${b.fecha}T${b.hora}`);
+                return fechaB.getTime() - fechaA.getTime();
+            });
+
+            setReservas(ordenadas);
         } catch (error) {
             console.error("Error fetching reservas:", error);
         } finally {
