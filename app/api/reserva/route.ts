@@ -47,10 +47,17 @@ export async function POST(req: Request) {
     }
 
     // 1.5.5. VALIDAR UNA RESERVA POR DÍA
+    // Convertir la fecha a ISO string sin hora para comparar solo el día
+    const fechaObj = new Date(fecha);
+    const fechaISO = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
+    
     const reservaDelDia = await prisma.cita.findFirst({
       where: {
         cliente: { email: clienteEmail },
-        fecha: new Date(fecha),
+        fecha: {
+          gte: new Date(`${fechaISO}T00:00:00Z`),
+          lt: new Date(`${fechaISO}T23:59:59Z`)
+        },
         estado: { in: ["PENDIENTE", "CONFIRMADA"] }
       }
     });
