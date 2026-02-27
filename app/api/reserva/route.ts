@@ -46,36 +46,7 @@ export async function POST(req: Request) {
       }, { status: 429 });
     }
 
-    // 1.5.5. VALIDAR UNA RESERVA POR BARBERO POR DÍA (por cliente)
-    // Un cliente no puede tener 2 citas con el MISMO BARBERO en el MISMO DÍA
-    const fechaObj = new Date(fecha);
-    const fechaISO = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
-    
-    console.log("[v0] Validando cita:", { clienteEmail, barberoId, fecha: fechaISO });
-    
-    const reservaConMismoBarbero = await prisma.cita.findFirst({
-      where: {
-        cliente: { email: clienteEmail },
-        barberoId: barberoId,
-        fecha: {
-          gte: new Date(`${fechaISO}T00:00:00Z`),
-          lte: new Date(`${fechaISO}T23:59:59.999Z`)
-        },
-        estado: { in: ["PENDIENTE", "CONFIRMADA"] }
-      }
-    });
-
-    console.log("[v0] Reserva encontrada:", reservaConMismoBarbero?.id || "ninguna");
-
-    if (reservaConMismoBarbero) {
-      console.log("[v0] Bloqueando reserva duplicada para:", clienteEmail);
-      return NextResponse.json({
-        error: "Ya tienes una reserva con este barbero para este día.",
-        isAlreadyReservedToday: true
-      }, { status: 409 });
-    }
-
-    // 1.6. VALIDAR SI EL SLOT SIGUE DISPONIBLE (PREVENIR DUPLICADOS)
+    // 1.5.5. VALIDAR SI EL SLOT SIGUE DISPONIBLE (PREVENIR DUPLICADOS)
     const citaExistente = await prisma.cita.findFirst({
       where: {
         barberoId,
