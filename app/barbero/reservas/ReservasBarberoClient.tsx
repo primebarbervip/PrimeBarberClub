@@ -90,18 +90,18 @@ export default function ReservasBarberoClient({ citas }: { citas: Cita[] }) {
       cita.estado.toUpperCase() === tabActiva.toUpperCase()
     );
     
-    // Ordenar por fecha y hora (más lejanas primero)
+    // Ordenar por fecha y hora (más cercanas primero de izquierda a derecha)
     return filtradas.sort((a, b) => {
       const fechaA = new Date(a.fecha);
       const fechaB = new Date(b.fecha);
-      const diffFecha = fechaB.getTime() - fechaA.getTime();
+      const diffFecha = fechaA.getTime() - fechaB.getTime();
       
       if (diffFecha !== 0) return diffFecha;
       
-      // Si tienen la misma fecha, ordenar por hora (de mayor a menor)
+      // Si tienen la misma fecha, ordenar por hora (de menor a mayor)
       const [horaA, minA] = a.hora.split(':').map(Number);
       const [horaB, minB] = b.hora.split(':').map(Number);
-      return (horaB * 60 + minB) - (horaA * 60 + minA);
+      return (horaA * 60 + minA) - (horaB * 60 + minB);
     });
   }, [citasActivas, tabActiva]);
 
