@@ -441,7 +441,6 @@ export async function obtenerConfiguracion() {
   } catch (error: any) {
     // Si hay error de inicialización de Prisma o DATABASE_URL no configurado,
     // devolvemos un objeto default en lugar de null para que el app siga funcionando
-    console.warn("⚠️ Aviso en obtenerConfiguracion:", error.message || error);
     return defaultConfig;
   }
 }
