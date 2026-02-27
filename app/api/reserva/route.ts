@@ -46,25 +46,26 @@ export async function POST(req: Request) {
       }, { status: 429 });
     }
 
-    // 1.5.5. VALIDAR UNA RESERVA POR DÍA (por cliente)
-    // Convertir la fecha a ISO string sin hora para comparar solo el día
+    // 1.5.5. VALIDAR UNA RESERVA POR BARBERO POR DÍA (por cliente)
+    // Un cliente no puede tener 2 citas con el MISMO BARBERO en el MISMO DÍA
     const fechaObj = new Date(fecha);
     const fechaISO = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
     
-    const reservaDelDia = await prisma.cita.findFirst({
+    const reservaConMismoBarbero = await prisma.cita.findFirst({
       where: {
         cliente: { email: clienteEmail },
+        barberoId: barberoId,
         fecha: {
           gte: new Date(`${fechaISO}T00:00:00Z`),
-          lt: new Date(`${fechaISO}T23:59:59Z`)
+          lte: new Date(`${fechaISO}T23:59:59.999Z`)
         },
         estado: { in: ["PENDIENTE", "CONFIRMADA"] }
       }
     });
 
-    if (reservaDelDia) {
+    if (reservaConMismoBarbero) {
       return NextResponse.json({
-        error: "Ya tienes una reserva para este día. Solo se permite una reserva por día.",
+        error: "Ya tienes una reserva con este barbero para este día.",
         isAlreadyReservedToday: true
       }, { status: 409 });
     }
