@@ -46,30 +46,7 @@ export async function POST(req: Request) {
       }, { status: 429 });
     }
 
-    // 1.5.5. VALIDAR UNA RESERVA POR DÍA (por cliente)
-    // Convertir la fecha a ISO string sin hora para comparar solo el día
-    const fechaObj = new Date(fecha);
-    const fechaISO = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
-    
-    const reservaDelDia = await prisma.cita.findFirst({
-      where: {
-        cliente: { email: clienteEmail },
-        fecha: {
-          gte: new Date(`${fechaISO}T00:00:00Z`),
-          lt: new Date(`${fechaISO}T23:59:59Z`)
-        },
-        estado: { in: ["PENDIENTE", "CONFIRMADA"] }
-      }
-    });
-
-    if (reservaDelDia) {
-      return NextResponse.json({
-        error: "Ya tienes una reserva para este día. Solo se permite una reserva por día.",
-        isAlreadyReservedToday: true
-      }, { status: 409 });
-    }
-
-    // 1.6. VALIDAR SI EL SLOT SIGUE DISPONIBLE (PREVENIR DUPLICADOS)
+    // 1.5.5. VALIDAR SI EL SLOT SIGUE DISPONIBLE (PREVENIR DUPLICADOS)
     const citaExistente = await prisma.cita.findFirst({
       where: {
         barberoId,

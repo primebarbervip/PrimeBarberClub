@@ -36,7 +36,7 @@ export default function BookingClient({ barberos = [], config }: Props) {
   const [barberoExpandidoId, setBarberoExpandidoId] = useState<number | null>(null);
   const [errorModal, setErrorModal] = useState<{ titulo: string; mensaje: string } | null>(null);
 
-  // Obtener citas ocupadas al cargar
+  // Obtener citas ocupadas (de todos los usuarios, para bloquear horas en el calendario)
   useEffect(() => {
     const obtenerCitasOcupadas = async () => {
       try {
@@ -44,11 +44,6 @@ export default function BookingClient({ barberos = [], config }: Props) {
         if (res.ok) {
           const data = await res.json();
           setCitasOcupadas(data);
-          
-          // Verificar si el usuario tiene reserva hoy
-          const today = new Date().toISOString().split('T')[0];
-          const tieneReservaEnFecha = data.some((cita: any) => cita.fecha === today);
-          setTieneReservaHoy(tieneReservaEnFecha);
         }
       } catch (error) {
         console.error("Error al obtener citas ocupadas:", error);
@@ -57,12 +52,28 @@ export default function BookingClient({ barberos = [], config }: Props) {
     obtenerCitasOcupadas();
   }, []);
 
-  // Actualizar cuando cambia la fecha seleccionada
+  // Verificar si EL USUARIO ACTUAL ya tiene reserva en la fecha seleccionada
   useEffect(() => {
-    const fechaFormato = fechaSel.toISOString().split('T')[0];
-    const tieneReservaEnFecha = citasOcupadas.some((cita: any) => cita.fecha === fechaFormato);
-    setTieneReservaHoy(tieneReservaEnFecha);
-  }, [fechaSel, citasOcupadas]);
+    const verificarMisReservas = async () => {
+      const userEmail = localStorage.getItem("user_email");
+      if (!userEmail || !fechaSel) {
+        setTieneReservaHoy(false);
+        return;
+      }
+      try {
+        const fechaFormato = fechaSel.toISOString().split('T')[0];
+        const res = await fetch(`/api/mis-reservas-activas?email=${encodeURIComponent(userEmail)}`);
+        if (res.ok) {
+          const misReservas = await res.json();
+          const tieneEnFecha = misReservas.some((cita: any) => cita.fecha === fechaFormato);
+          setTieneReservaHoy(tieneEnFecha);
+        }
+      } catch (error) {
+        setTieneReservaHoy(false);
+      }
+    };
+    verificarMisReservas();
+  }, [fechaSel]);
 
   const hideScrollbar = {
     scrollbarWidth: 'none' as const,
@@ -252,6 +263,18 @@ export default function BookingClient({ barberos = [], config }: Props) {
   };
 
   const handleFinalizar = async () => {
+    // Validar que el usuario esté autenticado
+    const userEmail = localStorage.getItem("user_email");
+    const userName = localStorage.getItem("user_name");
+    
+    if (!userEmail || !userName) {
+      setErrorModal({
+        titulo: "Autenticación Requerida",
+        mensaje: "Debes iniciar sesión para hacer una reserva. Por favor, inicia sesión o crea una cuenta."
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/reserva", {
@@ -263,8 +286,8 @@ export default function BookingClient({ barberos = [], config }: Props) {
           fecha: fechaSel,
           hora: horaSel,
           total: totalBs,
-          clienteEmail: localStorage.getItem("user_email") || "samuel@ejemplo.com",
-          clienteNombre: localStorage.getItem("user_name") || "Samuel",
+          clienteEmail: userEmail,
+          clienteNombre: userName,
           servicioId: seleccionados[0],
           serviciosNombres: itemsSeleccionados.map(s => s.nombre).join(", ")
         })
