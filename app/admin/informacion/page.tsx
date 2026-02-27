@@ -13,13 +13,11 @@ export default function AdminConfigPage() {
         direccion: "",
         googleMapsUrl: "",
         telefono: "",
-        logo: "",
-        emailApiKey: ""
+        logo: ""
     });
     const [logoPreview, setLogoPreview] = useState<string | null>(null);
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-    const [showApiKey, setShowApiKey] = useState(false);
 
     useEffect(() => {
         const loadConfig = async () => {
@@ -30,8 +28,7 @@ export default function AdminConfigPage() {
                     direccion: data.direccion || "",
                     googleMapsUrl: data.googleMapsUrl || "",
                     telefono: data.telefono || "",
-                    logo: data.logo || "",
-                    emailApiKey: data.emailApiKey || ""
+                    logo: data.logo || ""
                 });
             }
             setLoading(false);
@@ -62,7 +59,6 @@ export default function AdminConfigPage() {
         formData.append("googleMapsUrl", config.googleMapsUrl);
         formData.append("telefono", config.telefono);
         formData.append("logo", config.logo);
-        formData.append("emailApiKey", config.emailApiKey);
         if (logoFile) {
             formData.append("logoFile", logoFile);
         }
@@ -239,44 +235,7 @@ export default function AdminConfigPage() {
                         </div>
                     </section>
 
-                    <section className="mt-16">
-                        <div className="flex items-center gap-4 mb-10">
-                            <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
-                                <ImageIcon className="text-zinc-400" size={20} />
-                            </div>
-                            <div>
-                                <h2 className="text-lg font-bold text-white leading-none tracking-tight">API de Emails</h2>
-                                <p className="text-[10px] text-zinc-500 mt-1 uppercase tracking-widest font-black">Configurar Llave de Aplicación</p>
-                            </div>
-                        </div>
 
-                        <div className="space-y-4 bg-black/40 border border-white/5 rounded-3xl p-8">
-                            <p className="text-sm text-zinc-400 mb-6">Si los correos de confirmación dejan de funcionar, actualiza tu llave de aplicación (API Key) del servicio de email.</p>
-                            
-                            <div className="space-y-2">
-                                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1 block">Llave API de Email</label>
-                                <div className="relative">
-                                    <input
-                                        type={showApiKey ? "text" : "password"}
-                                        value={config.emailApiKey}
-                                        onChange={(e) => setConfig({ ...config, emailApiKey: e.target.value })}
-                                        placeholder="Pega aquí tu llave API (16+ caracteres)"
-                                        className="w-full bg-black/50 border border-white/5 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-white/20 transition-all font-mono text-sm pr-14"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowApiKey(!showApiKey)}
-                                        className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-[12px] font-bold uppercase"
-                                    >
-                                        {showApiKey ? "Ocultar" : "Ver"}
-                                    </button>
-                                </div>
-                                <p className="text-[10px] text-zinc-500 mt-2">
-                                    Puedes obtener tu llave API en el panel de control del proveedor de emails (Brevo, SendGrid, etc.)
-                                </p>
-                            </div>
-                        </div>
-                    </section>
 
                     <AnimatePresence>
                         {message && (

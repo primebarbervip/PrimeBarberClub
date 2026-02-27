@@ -32,11 +32,11 @@ export default async function ReservarPage() {
   });
 
   const barberos = barberosRaw.map(b => ({
-    id: b.id,
-    nombre: b.nombre,
-    especialidad: b.especialidad || "Staff",
-    img: b.img || null,
-    descripcion: b.descripcion,
+      id: b.id,
+      nombre: b.nombre,
+      especialidad: b.especialidad || "Staff",
+      img: b.img || null,
+      descripcion: b.descripcion,
     inicioJornada: b.inicioJornada,
     finJornada: b.finJornada,
     inicioAlmuerzo: b.inicioAlmuerzo,

@@ -116,8 +116,5 @@ model Configuracion {
   telefono      String?
   logo          String?
   
-  // --- CONFIGURACIÓN DE EMAILS ---
-  emailApiKey   String   @default("")
-  
   enMantenimiento Boolean @default(false)
 }

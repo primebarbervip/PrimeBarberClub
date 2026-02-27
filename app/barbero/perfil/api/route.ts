@@ -76,9 +76,10 @@ export async function PUT(req: Request) {
       })
     ]);
 
-    // Forzamos la revalidación del layout del barbero para que el sidebar se actualice
+    // Forzamos la revalidación de las páginas que muestran los barberos
     revalidatePath("/barbero", "layout");
     revalidatePath("/barbero");
+    revalidatePath("/reservar"); // Revalidar la página de reservas para que muestre la foto actualizada
 
     return NextResponse.json({ success: true, img });
 

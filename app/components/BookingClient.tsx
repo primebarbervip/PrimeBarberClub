@@ -34,6 +34,7 @@ export default function BookingClient({ barberos = [], config }: Props) {
   const [mostrarModalBarbero, setMostrarModalBarbero] = useState(false);
   const [mostrarModalCalendario, setMostrarModalCalendario] = useState(false);
   const [barberoExpandidoId, setBarberoExpandidoId] = useState<number | null>(null);
+  const [errorModal, setErrorModal] = useState<{ titulo: string; mensaje: string } | null>(null);
 
   // Obtener citas ocupadas al cargar
   useEffect(() => {
@@ -273,14 +274,28 @@ export default function BookingClient({ barberos = [], config }: Props) {
         setPaso(5);
       } else {
         if (res.status === 409) {
-          alert("¡Lo sentimos! Este horario acaba de ser ocupado. Por favor elige otra hora.");
+          setErrorModal({
+            titulo: "Horario No Disponible",
+            mensaje: "Este horario acaba de ser ocupado. Por favor elige otra hora disponible."
+          });
           setPaso(3); // Regresar al calendario
+        } else if (res.status === 400 && data.error?.includes("demasiadas")) {
+          setErrorModal({
+            titulo: "Límite de Reservas Alcanzado",
+            mensaje: "Tienes demasiadas reservas activas. Máximo 3 simultáneamente (pendientes o confirmadas). Por favor espera a que se completen o cancelen antes de hacer una nueva."
+          });
         } else {
-          alert(data.error || "Error al procesar la reserva");
+          setErrorModal({
+            titulo: "Error al Procesar",
+            mensaje: data.error || "Error al procesar la reserva. Por favor intenta nuevamente."
+          });
         }
       }
     } catch (e) {
-      alert("Error de conexión al servidor");
+      setErrorModal({
+        titulo: "Error de Conexión",
+        mensaje: "No se pudo conectar con el servidor. Por favor verifica tu conexión e intenta de nuevo."
+      });
     } finally {
       setLoading(false);
     }
@@ -305,13 +320,13 @@ export default function BookingClient({ barberos = [], config }: Props) {
       {/* CABECERA PASO 2 */}
       {paso === 2 && (
         <div className="sticky top-[53px] bg-white z-40 px-4 py-3 border-b border-zinc-100 flex items-center justify-between">
-          <div className="flex gap-2">
+            <div className="flex gap-2">
             <button onClick={() => setTabActiva("SERVICIOS")} className={`px-5 py-2 rounded-full text-[12px] font-bold transition-all ${tabActiva === "SERVICIOS" ? "bg-zinc-900 text-white shadow-md" : "text-zinc-400 hover:bg-zinc-50"}`}>SERVICIOS</button>
             <button onClick={() => setTabActiva("COMBOS")} className={`px-5 py-2 rounded-full text-[12px] font-bold transition-all ${tabActiva === "COMBOS" ? "bg-zinc-900 text-white shadow-md" : "text-zinc-400"}`}>COMBOS</button>
           </div>
           <button onClick={() => setMostrarModalBarbero(true)} className="flex items-center gap-2 bg-zinc-50 border border-zinc-200 rounded-full pl-1 pr-3 py-1 scale-90 active:scale-95">
             <div className="w-7 h-7 rounded-full bg-zinc-200 overflow-hidden border border-white">
-              {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" />}
+              {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" alt={profesionalSel.nombre} />}
             </div>
             <span className="text-[10px] font-black text-zinc-600 uppercase tracking-tighter max-w-[80px] truncate">{profesionalSel?.nombre.split(' ')[0]}</span>
             <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
@@ -380,7 +395,7 @@ export default function BookingClient({ barberos = [], config }: Props) {
             <div className="px-4 mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3 bg-zinc-50 border border-zinc-200 rounded-full pl-1.5 pr-5 py-1.5 shadow-sm text-left">
                 <div className="w-8 h-8 rounded-full bg-zinc-100 overflow-hidden border border-zinc-100">
-                  {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" />}
+                  {profesionalSel?.img && <img src={profesionalSel.img} className="w-full h-full object-cover" alt={profesionalSel.nombre} />}
                 </div>
                 <span className="font-bold text-[14px] text-zinc-900">{profesionalSel?.nombre}</span>
               </div>
@@ -420,37 +435,32 @@ export default function BookingClient({ barberos = [], config }: Props) {
         {/* PASO 4: CONFIRMACIÓN (DISEÑO PRIME) */}
         {animarPaso === 4 && (
           <div className="px-4 pt-2 pb-32 max-w-2xl mx-auto space-y-8">
-            <div className="bg-zinc-50/80 backdrop-blur-sm border border-zinc-100 rounded-[2.5rem] p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left transition-all hover:shadow-xl hover:shadow-zinc-200/50 group">
-              <div className="w-20 h-20 rounded-3xl bg-white overflow-hidden border border-zinc-200 flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-500">
+            <div className="bg-white border border-zinc-100 rounded-[2rem] p-6 sm:p-8 flex flex-col sm:flex-row gap-8 items-start transition-all hover:shadow-lg hover:shadow-zinc-200/50 group">
+              {/* Logo grande a la izquierda */}
+              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-zinc-50 overflow-hidden border border-zinc-200 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform duration-500">
                 <img src={config.logo || "/abel.jpg"} className="w-full h-full object-cover" alt="Shop" />
               </div>
-              <div className="flex-1 space-y-3">
+              
+              {/* Información a la derecha */}
+              <div className="flex-1 space-y-4">
                 <div>
-                  <h2 className="font-black text-[20px] text-zinc-900 tracking-tighter leading-none">{config.nombreTienda || "Barber Shop Prime"}</h2>
-                  <div className="flex items-center justify-center sm:justify-start gap-1 text-[13px] text-yellow-600 mt-2 font-bold">
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <span>4,9</span>
-                    <span className="text-zinc-400 font-medium ml-1">(120 reviews)</span>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-[13px] text-zinc-500 font-medium leading-relaxed max-w-[280px] mx-auto sm:mx-0">
+                  <h2 className="font-black text-[24px] sm:text-[28px] text-zinc-900 tracking-tighter leading-none">{config.nombreTienda || "Barber Shop Prime"}</h2>
+                  <p className="text-[13px] text-zinc-500 font-medium leading-relaxed mt-4">
                     {config.direccion || "Dirección no configurada"}
                   </p>
-
-                  {config.googleMapsUrl && (
-                    <a
-                      href={config.googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-95 shadow-lg shadow-zinc-200"
-                    >
-                      <MapPin size={14} />
-                      Cómo llegar
-                    </a>
-                  )}
                 </div>
+
+                {config.googleMapsUrl && (
+                  <a
+                    href={config.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-95 shadow-md"
+                  >
+                    <MapPin size={14} />
+                    Cómo llegar
+                  </a>
+                )}
               </div>
             </div>
 
@@ -604,6 +614,41 @@ export default function BookingClient({ barberos = [], config }: Props) {
           />
         )}
       </AnimatePresence>
+
+      {/* ERROR MODAL */}
+      <AnimatePresence>
+        {errorModal && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setErrorModal(null)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl text-center space-y-6"
+            >
+              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto border border-red-100">
+                <AlertCircle className="text-red-600" size={32} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-zinc-900 tracking-tight mb-3">{errorModal.titulo}</h2>
+                <p className="text-[14px] text-zinc-600 leading-relaxed font-medium">{errorModal.mensaje}</p>
+              </div>
+              <button
+                onClick={() => setErrorModal(null)}
+                className="w-full py-4 bg-zinc-900 hover:bg-black text-white font-black rounded-2xl text-[12px] uppercase tracking-widest transition-all active:scale-95"
+              >
+                Entendido
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -619,7 +664,7 @@ function ItemBarbero({ nombre, rol, img, descripcion, expandido, onToggle, onCli
       <div className="flex items-center justify-between py-4 px-6 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center gap-5">
           <div className={`w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden border-2 transition-all ${expandido ? 'border-zinc-900 shadow-md' : 'border-zinc-50'}`}>
-            {img ? <img src={img} className="w-full h-full object-cover" /> : <User className="text-zinc-300" size={24} />}
+            {img ? <img src={img} className="w-full h-full object-cover" alt={nombre} /> : <User className="text-zinc-300" size={24} />}
           </div>
           <div className="text-left">
             <h3 className="font-sans font-semibold text-[17px] text-zinc-900 leading-tight">{nombre}</h3>
