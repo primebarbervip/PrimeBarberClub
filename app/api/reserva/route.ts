@@ -51,6 +51,8 @@ export async function POST(req: Request) {
     const fechaObj = new Date(fecha);
     const fechaISO = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
     
+    console.log("[v0] Validando cita:", { clienteEmail, barberoId, fecha: fechaISO });
+    
     const reservaConMismoBarbero = await prisma.cita.findFirst({
       where: {
         cliente: { email: clienteEmail },
@@ -63,7 +65,10 @@ export async function POST(req: Request) {
       }
     });
 
+    console.log("[v0] Reserva encontrada:", reservaConMismoBarbero?.id || "ninguna");
+
     if (reservaConMismoBarbero) {
+      console.log("[v0] Bloqueando reserva duplicada para:", clienteEmail);
       return NextResponse.json({
         error: "Ya tienes una reserva con este barbero para este día.",
         isAlreadyReservedToday: true
