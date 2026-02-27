@@ -362,9 +362,6 @@ export async function guardarConfiguracion(formData: FormData) {
     const webNombre = formData.get("webNombre")?.toString() || "";
     let webLogo = formData.get("webLogo")?.toString() || "";
 
-    // API Key para emails
-    const emailApiKey = formData.get("emailApiKey")?.toString() || "";
-
     // MANEJO DE ARCHIVO (LOGO GENERAL) - CON CLOUDINARY
     const logoFile = formData.get("logoFile") as File | null;
     if (logoFile && logoFile.size > 0) {
@@ -390,7 +387,6 @@ export async function guardarConfiguracion(formData: FormData) {
     if (logo) updateData.logo = logo;
     if (webNombre) updateData.webNombre = webNombre;
     if (webLogo) updateData.webLogo = webLogo;
-    if (emailApiKey) updateData.emailApiKey = emailApiKey;
 
     await (prisma as any).configuracion.upsert({
       where: { id: 1 },
@@ -403,8 +399,7 @@ export async function guardarConfiguracion(formData: FormData) {
         telefono, 
         logo,
         webNombre,
-        webLogo,
-        emailApiKey
+        webLogo
       }
     });
 
@@ -428,7 +423,6 @@ const defaultConfig = {
   googleMapsUrl: "",
   telefono: "",
   logo: "",
-  emailApiKey: "",
   enMantenimiento: false
 };
 
