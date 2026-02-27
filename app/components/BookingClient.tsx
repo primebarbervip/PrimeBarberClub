@@ -252,6 +252,18 @@ export default function BookingClient({ barberos = [], config }: Props) {
   };
 
   const handleFinalizar = async () => {
+    // Validar que el usuario esté autenticado
+    const userEmail = localStorage.getItem("user_email");
+    const userName = localStorage.getItem("user_name");
+    
+    if (!userEmail || !userName) {
+      setErrorModal({
+        titulo: "Autenticación Requerida",
+        mensaje: "Debes iniciar sesión para hacer una reserva. Por favor, inicia sesión o crea una cuenta."
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/reserva", {
@@ -263,8 +275,8 @@ export default function BookingClient({ barberos = [], config }: Props) {
           fecha: fechaSel,
           hora: horaSel,
           total: totalBs,
-          clienteEmail: localStorage.getItem("user_email") || "samuel@ejemplo.com",
-          clienteNombre: localStorage.getItem("user_name") || "Samuel",
+          clienteEmail: userEmail,
+          clienteNombre: userName,
           servicioId: seleccionados[0],
           serviciosNombres: itemsSeleccionados.map(s => s.nombre).join(", ")
         })
