@@ -183,6 +183,15 @@ export default function ReservasClient() {
         }
     };
 
+    // Función para ordenar reservas por fecha más cercana
+    const ordenarPorFecha = (arr: Reserva[]) => {
+        return [...arr].sort((a, b) => {
+            const fechaA = new Date(`${a.fecha}T${a.hora}`);
+            const fechaB = new Date(`${b.fecha}T${b.hora}`);
+            return fechaA.getTime() - fechaB.getTime();
+        });
+    };
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
@@ -287,7 +296,7 @@ export default function ReservasClient() {
                     </div>
                 ) : (
                     <div className="grid gap-6">
-                                        {reservas.map((reserva) => {
+                                        {ordenarPorFecha(reservas).map((reserva) => {
                                             const estadoDinamico = getEstadoDinamico(reserva.estado, reserva.fecha, reserva.hora);
                                             const status = getStatusStyles(estadoDinamico);
                                             const isPending = reserva.estado.toLowerCase() === "pendiente" && !esCitaExpirada(reserva.fecha, reserva.hora);
