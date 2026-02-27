@@ -46,14 +46,14 @@ export async function POST(req: Request) {
       }, { status: 429 });
     }
 
-    // 1.5.5. VALIDAR UNA CITA POR BARBERO POR DÍA (para todos los usuarios)
+    // 1.5.5. VALIDAR UNA RESERVA POR DÍA (por cliente)
     // Convertir la fecha a ISO string sin hora para comparar solo el día
     const fechaObj = new Date(fecha);
     const fechaISO = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
     
     const reservaDelDia = await prisma.cita.findFirst({
       where: {
-        barberoId: barberoId,
+        cliente: { email: clienteEmail },
         fecha: {
           gte: new Date(`${fechaISO}T00:00:00Z`),
           lt: new Date(`${fechaISO}T23:59:59Z`)
