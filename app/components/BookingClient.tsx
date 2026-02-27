@@ -458,10 +458,9 @@ export default function BookingClient({ barberos = [], config }: Props) {
                     className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-95 shadow-md"
                   >
                     <MapPin size={14} />
-                      Cómo llegar
-                    </a>
-                  )}
-                </div>
+                    Cómo llegar
+                  </a>
+                )}
               </div>
             </div>
 
